@@ -56,20 +56,26 @@ const login = async (req, res) => {
       // set secret key token kita untuk nanti validasi
       // set expired token
       // lalu berikan token jika berhasil login
-      // jwt.sign({ userToken }, process.env.JWT_KEY, {
-      //   expiresIn: '8d' //set exipre token
-      // }, (err, token) => {
-      //   return res.json({ token: token }).status(200)
+      // const token = jwt.sign({userToken}, process.env.JWT_KEY, {
+      //   expiresIn: "1h"
       // });
-      const token = jwt.sign({userToken}, process.env.JWT_KEY, {
-        expiresIn: "1h"
-      });
 
-      res.status(200)
-      res.json({
-        status: 200,
-        message: 'Auth granted, welcome!',
-        token: token
+      const token = jwt.sign({userToken}, process.env.JWT_KEY, {
+        expiresIn: "1hr"
+      }, (err, token) => {
+        if (err) {
+          res.json({
+            message: "Something error!",
+            data: err
+          })
+        } else {
+          res.status(200)
+          res.json({
+            status: 200,
+            message: 'Auth granted, welcome!',
+            token: token
+          });
+        }
       });
     }
   } catch (error) {
