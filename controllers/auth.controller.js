@@ -55,14 +55,10 @@ const login = async (req, res) => {
       // set secret key token kita untuk nanti validasi
       // set expired token
       // lalu berikan token jika berhasil login
-      jwt.sign({ userToken }, process.env.JWT_KEY, {
-        expiresIn: '365d' // set expired token
+      jwt.sign({userToken}, process.env.JWT_KEY, {
+        expiresIn: '365d' // set expire toke
       }, (err, token) => {
-        res.status(200);
-        res.json({
-          token: token,
-          status: 200
-        })
+        res.json({token: token}).status(200);
       });
     }
   } catch (error) {
