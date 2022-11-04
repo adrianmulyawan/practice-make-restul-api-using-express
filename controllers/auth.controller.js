@@ -29,12 +29,12 @@ const login = async (req, res) => {
     const username = req.body.username.trim();
     const password = req.body.password.trim();
 
-    const checkUsername = await Users.findOne({
+    const checkUsername = await Users.findOne({ 
       where: {
-        username: username
-      }
+        username: username 
+      } 
     });
-    const fetchResult = checkUsername.dataValues;
+    const fetchResult = checkUsername.dataValues
     const verify = passwordHash.verify(password, fetchResult.password);
 
     // cek apakah password yang di input sama dengan di db
@@ -56,10 +56,20 @@ const login = async (req, res) => {
       // set secret key token kita untuk nanti validasi
       // set expired token
       // lalu berikan token jika berhasil login
-      jwt.sign({userToken}, process.env.JWT_KEY, {
-        expiresIn: '365d' // set expire toke
-      }, (err, token) => {
-        res.json({token: token}).status(200);
+      // jwt.sign({ userToken }, process.env.JWT_KEY, {
+      //   expiresIn: '8d' //set exipre token
+      // }, (err, token) => {
+      //   return res.json({ token: token }).status(200)
+      // });
+      const token = jwt.sign({userToken}, process.env.JWT_KEY, {
+        expiresIn: "1h"
+      });
+
+      res.status(200)
+      res.json({
+        status: 200,
+        message: 'Auth granted, welcome!',
+        token: token
       });
     }
   } catch (error) {
@@ -72,5 +82,5 @@ const login = async (req, res) => {
 
 module.exports = { 
   register,
-  login,
+  login
 }
