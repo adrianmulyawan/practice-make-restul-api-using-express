@@ -1,8 +1,9 @@
 const db = require('../models');
-const Users = db.User;
 const jwt = require('jsonwebtoken');
 const passwordHash = require('password-hash');
 require('dotenv').config();
+
+const Users = db.User;
 
 const register = async (input, res) => {
   try {
