@@ -4,6 +4,7 @@ const passwordHash = require('password-hash');
 require('dotenv').config();
 
 const Users = db.User;
+const Blacklist = db.Blacklist;
 
 const register = async (input, res) => {
   try {
@@ -61,7 +62,7 @@ const login = async (req, res) => {
       // });
       const secret = 'secret';
       const token = jwt.sign({userToken}, secret, {
-        expiresIn: "30s"
+        expiresIn: "1h"
       }, (err, token) => {
         if (err) {
           res.json({
@@ -86,7 +87,36 @@ const login = async (req, res) => {
   }
 };
 
+const logout = async (req, res) => {
+  try {
+    if (req.headers.authorization) {
+      const token = req.headers.authorization.split(' ')[1];
+      await Blacklist.create({
+        token: token
+      });
+
+      res.status(200);
+      res.json({
+        status: 200,
+        message: "Logout Successfully"
+      });
+    } else {
+      res.status(422);
+      res.json({
+        status: 422,
+        message: 'Token required!'
+      });
+    }
+  } catch (error) {
+    res.status(400);
+    res.json({
+      message: error.message ? error.message : "failed when logout process"
+    });
+  }
+};
+
 module.exports = { 
   register,
-  login
+  login,
+  logout
 }
