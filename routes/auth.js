@@ -2,7 +2,11 @@ const express = require('express');
 const { check, validationResult } = require('express-validator');
 const passwordHash = require('password-hash');
 const db = require('../models');
-const { register, login } = require('../controllers/auth.controller');
+const { 
+  register, 
+  login, 
+  logout 
+} = require('../controllers/auth.controller');
 
 const Users = db.User;
 const router = express.Router();
@@ -90,5 +94,8 @@ router.post('/auth/login', [checkValidationLogin], (req, res) => {
     login(req, res);
   }
 });
+
+// Route Logout
+router.post('/auth/logout', logout);
 
 module.exports = router;
